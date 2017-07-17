@@ -10,6 +10,9 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import java.util.List;
 
 public class Main {
+    //http://freeproxylists.net/zh/
+    //http://freeproxylists.net/zh/?c=&pt=&pr=HTTPS&a%5B%5D=0&a%5B%5D=1&a%5B%5D=2&u=50
+    //http://www.cool-proxy.net
 
     static WebDriver driver;
 
@@ -25,9 +28,25 @@ public class Main {
         driver = new ChromeDriver(capabilities);
         driver.get("http://freeproxylists.net/zh/");
 
-        System.out.println(getCellText(By.className("DataGrid"), "1.1"));
-
+        //System.out.println(getCellText(By.className("DataGrid"), "1.1"));
+        int rowSize = getTableTrSize(By.className("DataGrid"));
+        for (int i=0; i<rowSize; i++){
+            try{
+                System.out.println(getCellText(By.className("DataGrid"), i+".0"));
+                System.out.println(getCellText(By.className("DataGrid"), i+".1"));
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
     }
+
+    public static int getTableTrSize(By by){
+        WebElement table = driver.findElement(by);
+        List<WebElement> rows = table.findElements(By.tagName("tr"));
+        System.out.println(rows.size());
+        return rows.size();
+    }
+
 
     public static String getCellText(By by, String tableCellAddress) {
         //得到table元素对象
